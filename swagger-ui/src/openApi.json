@@ -9,13 +9,16 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
+
   "servers": [
     {
       "url": "https://pp6vr2duqa.execute-api.eu-west-1.amazonaws.com/dev",
       "description": "Dev server"
     }
   ],
+
   "tags": [{ "name": "CRUD operations" }],
+
   "paths": {
     "/products": {
       "get": {
@@ -43,7 +46,8 @@
             "in": "path",
             "schema": { "$ref": "#/components/schemas/productId" },
             "required": true,
-            "description": "Product id"
+            "description": "Product id",
+            "example": "241b4b9c-e2cd-42df-8b97-75e00db467a0"
           }
         ],
         "responses": {
@@ -59,27 +63,33 @@
       }
     }
   },
-  "componenst": {
+
+  "components": {
     "schemas": {
       "productId": {
         "type": "string",
-        "description": "Product UUID"
+        "description": "Product UUID",
+        "example": "241b4b9c-e2cd-42df-8b97-75e00db467a0"
       },
       "count": {
         "type": "integer",
-        "description": "Count of products"
+        "description": "Count of products",
+        "example": 2
       },
       "price": {
-        "type": "integer",
-        "description": "Price of product"
+        "type": "number",
+        "description": "Price of product",
+        "example": 2.4
       },
       "description": {
         "type": "string",
-        "description": "Description of product"
+        "description": "Description of product",
+        "example": "Some product description"
       },
       "title": {
         "type": "string",
-        "description": "Title of product"
+        "description": "Title of product",
+        "example": "Some product title"
       },
       "Product": {
         "type": "object",
@@ -103,7 +113,7 @@
       },
       "Products": {
         "type": "array",
-        "items": "#/components/schemas/Product"
+        "items": { "$ref": "#/components/schemas/Product" }
       }
     }
   }

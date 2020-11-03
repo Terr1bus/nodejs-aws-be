@@ -4,7 +4,11 @@
   "description": "A simple setup of Swagger UI with Webpack",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server --open",
+    "client:deploy": "sls client deploy --no-config-change --no-policy-change --no-cors-change",
+    "client:deploy:nc": "npm run client:deploy -- --no-confirm",
+    "client:build:deploy": "npm run build && npm run client:deploy",
+    "client:build:deploy:nc": "npm run build && npm run client:deploy:nc"
   },
   "author": "Shaun Luttin",
   "license": "Apache-2.0",
@@ -19,6 +23,7 @@
   "dependencies": {
     "css-loader": "^2.1.0",
     "json-loader": "^0.5.7",
+    "serverless-finch": "^2.6.0",
     "style-loader": "^0.23.1",
     "swagger-ui": "^3.36.1",
     "yaml-loader": "^0.5.0"
