@@ -1,5 +1,5 @@
-import { products } from './products';
-import { Product } from './types';
+import { products } from '../products';
+import { Product } from '../types';
 
 type SortOrder = 'ASC' | 'DESC';
 

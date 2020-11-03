@@ -4,6 +4,13 @@ type Options = Omit<APIGatewayProxyResult, 'body'> & {
   body: Record<string, any>;
 };
 
+const corsHeaders = {
+  'Access-Control-Allow-Headers': '*',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+  'Access-Control-Allow-Credentials': true,
+};
+
 export class ApiGatewayResult implements APIGatewayProxyResult {
   statusCode: number;
   headers?: { [header: string]: string | number | boolean };
@@ -32,5 +39,10 @@ export class ApiGatewayResult implements APIGatewayProxyResult {
 
   public setStatusCode(statusCode: number): void {
     this.statusCode = statusCode;
+  }
+
+  public addCors(): this {
+    this.headers = { ...this.headers, ...corsHeaders };
+    return this;
   }
 }

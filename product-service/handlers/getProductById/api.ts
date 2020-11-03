@@ -1,8 +1,8 @@
-import { products } from './products';
+import { products } from '../products';
 import { validate } from 'uuid';
 
-import { HttpError } from '../utils/HttpError';
-import { Product } from './types';
+import { HttpError } from '../../utils/HttpError';
+import { Product } from '../types';
 
 const productNotFoundError = new HttpError('Product not found', 400);
 
