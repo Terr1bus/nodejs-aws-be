@@ -18,7 +18,7 @@ export const getProducts: APIGatewayProxyHandler = async (event, _context) => {
   } catch (e) {
     const response = new ApiGatewayResult({
       statusCode: 500,
-      body: { message: 'Something went wrong' },
+      body: { message: e?.message ?? 'Something went wrong' },
     });
     if (e instanceof HttpError) {
       response.setBody({ message: e.message });

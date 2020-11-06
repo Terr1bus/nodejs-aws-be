@@ -1,2 +1,2 @@
-export { getAllProductsFromDb } from './getProductsList/api';
-export { getProductById } from './getProductById/api';
+export { getProducts } from './getProductsList';
+export { getProduct } from './getProductById';
