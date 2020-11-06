@@ -1,0 +1,120 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Droids",
+    "description": "Droid store API",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+
+  "servers": [
+    {
+      "url": "https://pp6vr2duqa.execute-api.eu-west-1.amazonaws.com/dev",
+      "description": "Dev server"
+    }
+  ],
+
+  "tags": [{ "name": "CRUD operations" }],
+
+  "paths": {
+    "/products": {
+      "get": {
+        "tags": ["CRUD operations"],
+        "description": "Get products",
+        "responses": {
+          "200": {
+            "description": "Products were obtained",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Products" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": ["CRUD operations"],
+        "description": "Get products",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": { "$ref": "#/components/schemas/productId" },
+            "required": true,
+            "description": "Product id",
+            "example": "241b4b9c-e2cd-42df-8b97-75e00db467a0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product were obtained",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "productId": {
+        "type": "string",
+        "description": "Product UUID",
+        "example": "241b4b9c-e2cd-42df-8b97-75e00db467a0"
+      },
+      "count": {
+        "type": "integer",
+        "description": "Count of products",
+        "example": 2
+      },
+      "price": {
+        "type": "number",
+        "description": "Price of product",
+        "example": 2.4
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of product",
+        "example": "Some product description"
+      },
+      "title": {
+        "type": "string",
+        "description": "Title of product",
+        "example": "Some product title"
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/productId"
+          },
+          "count": {
+            "$ref": "#/components/schemas/count"
+          },
+          "price": {
+            "$ref": "#/components/schemas/price"
+          },
+          "description": {
+            "$ref": "#/components/schemas/description"
+          },
+          "title": {
+            "$ref": "#/components/schemas/title"
+          }
+        }
+      },
+      "Products": {
+        "type": "array",
+        "items": { "$ref": "#/components/schemas/Product" }
+      }
+    }
+  }
+}
