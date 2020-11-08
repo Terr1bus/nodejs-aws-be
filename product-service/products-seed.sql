@@ -1,3 +1,10 @@
+create table products (
+  id uuid primary key default uuid_generate_v4(),
+  title text not null,
+  description text default null,
+  price integer not null,
+);
+
 insert into products (title, description, price)
   values
     ('Training lightsaber', 'The weakest and most harmless type of lightsaber is the one that has been “baby-proofed”: the training lightsabers', 1),
@@ -17,5 +24,11 @@ insert into products (title, description, price)
     ('Double-bladed lightsaber / Saberstaff', 'The double-bladed lightsaber, also known as Saberstaff, essentially makes the case that, when it comes to weapons, “two is better than one” and “the bigger, the better.”', 14),
     ('Inquisitorious lightsaber', 'There is such a thing as a double-bladed spinning', 15)
 ;
+
+create table stock (
+  product_id uuid primary key,
+  count integer not null,
+  foreign key (product_id) references products on delete cascade
+);
 
 insert into stock select id, 1 from products;

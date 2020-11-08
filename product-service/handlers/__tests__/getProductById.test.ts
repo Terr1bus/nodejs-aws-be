@@ -1,4 +1,4 @@
-import { getProductById } from '..';
+import { getProductById } from '../getProductById/api';
 import { HttpError } from '../../utils/HttpError';
 
 describe('getProductById spec', () => {

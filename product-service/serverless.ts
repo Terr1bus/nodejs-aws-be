@@ -35,7 +35,7 @@ const serverlessConfiguration: Serverless = {
   },
   functions: {
     getProductById: {
-      handler: 'handler.getProduct',
+      handler: 'lambdas.getProduct',
       events: [
         {
           http: {
@@ -47,11 +47,23 @@ const serverlessConfiguration: Serverless = {
       ],
     },
     getProductsList: {
-      handler: 'handler.getProducts',
+      handler: 'lambdas.getProducts',
       events: [
         {
           http: {
             method: 'get',
+            path: 'products',
+            cors: true,
+          },
+        },
+      ],
+    },
+    addProduct: {
+      handler: 'lambdas.addProduct',
+      events: [
+        {
+          http: {
+            method: 'post',
             path: 'products',
             cors: true,
           },
