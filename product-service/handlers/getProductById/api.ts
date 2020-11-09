@@ -13,7 +13,7 @@ export const getProductById = async (id: string): Promise<Product> => {
     const client = await new Database().getConnection();
 
     const queryResult = await client.query<Product>(
-      'SELECT * FROM products WHERE id=$1 LEFT JOIN stock ON products.id = stock.product_id',
+      'SELECT * FROM products LEFT JOIN stock ON products.id = stock.product_id WHERE id=$1',
       [id]
     );
 
