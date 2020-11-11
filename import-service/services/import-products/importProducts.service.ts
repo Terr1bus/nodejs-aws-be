@@ -9,13 +9,17 @@ export const getFileUploadSignedUrl = async (
   fileName: string
 ): Promise<string> => {
   try {
-    const s3 = new S3();
+    const s3 = new S3({
+      signatureVersion: 'v4',
+    });
+    const Key = uploadedDirKey + fileName;
     const params = {
       Bucket: bucketName,
       Expires: 60,
-      Key: fileName,
+      Key,
     };
-    const signedUrl = await s3.getSignedUrlPromise('getObject', params);
+    console.log({ params });
+    const signedUrl = await s3.getSignedUrlPromise('putObject', params);
     return signedUrl;
   } catch (e) {
     throw new HttpError({

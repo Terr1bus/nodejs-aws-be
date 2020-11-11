@@ -1,7 +1,7 @@
-import Ajv from 'ajv';
-import { ValidationResult, Validator } from '../../../utils/Validation/Validator';
-
-const ajv = new Ajv();
+import {
+  ValidationResult,
+  Validator,
+} from '../../../utils/Validation/Validator';
 
 type ImportFileType = {
   fileName: string;
@@ -10,11 +10,11 @@ type ImportFileType = {
 const schema = {
   type: 'object',
   properties: {
-    fileName: {
+    name: {
       type: 'string',
     },
   },
-  required: ['fileName'],
+  required: ['name'],
   additionalProperties: false,
 };
 
