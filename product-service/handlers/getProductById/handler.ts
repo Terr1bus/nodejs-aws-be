@@ -5,6 +5,7 @@ import { getProductById } from './api';
 
 export const getProduct: APIGatewayProxyHandler = async (event, _context) => {
   try {
+    console.log({ event });
     const product = await getProductById(event.pathParameters.id);
     const response = new ApiGatewayResult({
       statusCode: 200,

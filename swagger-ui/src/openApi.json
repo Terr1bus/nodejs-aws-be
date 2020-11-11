@@ -34,6 +34,54 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": ["CRUD operations"],
+        "description": "Add product",
+        "parameters": [
+          {
+            "name": "title",
+            "in": "body",
+            "schema": { "$ref": "#/components/schemas/product/title" },
+            "required": true,
+            "description": "Product title",
+            "example": "Product title"
+          },
+          {
+            "name": "description",
+            "in": "body",
+            "schema": { "$ref": "#/components/schemas/product/description" },
+            "required": false,
+            "description": "Product description",
+            "example": "Some description about product"
+          },
+          {
+            "name": "count",
+            "in": "body",
+            "schema": { "$ref": "#/components/schemas/product/count" },
+            "required": true,
+            "description": "Product count in stock",
+            "example": 4
+          },
+          {
+            "name": "price",
+            "in": "body",
+            "schema": { "$ref": "#/components/schemas/product/price" },
+            "required": true,
+            "description": "Price of product",
+            "example": 25
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product was created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          }
+        }
       }
     },
     "/products/{id}": {
@@ -44,7 +92,7 @@
           {
             "name": "id",
             "in": "path",
-            "schema": { "$ref": "#/components/schemas/productId" },
+            "schema": { "$ref": "#/components/schemas/product/id" },
             "required": true,
             "description": "Product id",
             "example": "241b4b9c-e2cd-42df-8b97-75e00db467a0"
@@ -66,48 +114,50 @@
 
   "components": {
     "schemas": {
-      "productId": {
-        "type": "string",
-        "description": "Product UUID",
-        "example": "241b4b9c-e2cd-42df-8b97-75e00db467a0"
-      },
-      "count": {
-        "type": "integer",
-        "description": "Count of products",
-        "example": 2
-      },
-      "price": {
-        "type": "number",
-        "description": "Price of product",
-        "example": 2.4
-      },
-      "description": {
-        "type": "string",
-        "description": "Description of product",
-        "example": "Some product description"
-      },
-      "title": {
-        "type": "string",
-        "description": "Title of product",
-        "example": "Some product title"
+      "product": {
+        "id": {
+          "type": "string",
+          "description": "Product UUID",
+          "example": "241b4b9c-e2cd-42df-8b97-75e00db467a0"
+        },
+        "count": {
+          "type": "integer",
+          "description": "Count of products",
+          "example": 2
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of product",
+          "example": 2.4
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of product",
+          "example": "Some product description"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of product",
+          "example": "Some product title"
+        }
       },
       "Product": {
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/productId"
+            "$ref": "#/components/schemas/product/id"
           },
           "count": {
-            "$ref": "#/components/schemas/count"
+            "$ref": "#/components/schemas/product/count"
           },
           "price": {
-            "$ref": "#/components/schemas/price"
+            "$ref": "#/components/schemas/product/price"
           },
           "description": {
-            "$ref": "#/components/schemas/description"
+            "$ref": "#/components/schemas/product/description"
           },
           "title": {
-            "$ref": "#/components/schemas/title"
+            "$ref": "#/components/schemas/product/title"
           }
         }
       },
