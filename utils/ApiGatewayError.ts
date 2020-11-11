@@ -1,4 +1,3 @@
-import { throwStatement } from '@babel/types';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { ApiGatewayResult } from './ApiGatewayResult';
 import { HttpError } from './HttpError';

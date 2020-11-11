@@ -12,7 +12,7 @@ const corsHeaders = {
 };
 
 export class ApiGatewayResult implements APIGatewayProxyResult {
-  statusCode: number;
+  statusCode = 200;
   headers?: { [header: string]: string | number | boolean };
   multiValueHeaders?: { [header: string]: (string | number | boolean)[] };
   body: string;
