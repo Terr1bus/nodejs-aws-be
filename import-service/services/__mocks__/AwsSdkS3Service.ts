@@ -1,4 +1,16 @@
 import { S3 } from 'aws-sdk';
+import AWS from 'aws-sdk-mock';
+
+AWS.mock(
+  'S3',
+  'getSignedUrlPromise',
+  async (params: { operationType: string; Expires: number; Key: string }) => {
+    const { Expires, Key, operationType } = params;
+    return Buffer.from(Key + operationType + Expires.toString()).toString(
+      'base64'
+    );
+  }
+);
 
 type Options = S3.ClientConfiguration & {
   bucketName: string;
@@ -28,11 +40,10 @@ export class AwsSdkS3Service {
   }
 
   public async getSignedUrl(params: GetSignedUrlParams): Promise<string> {
-    const { operationType, ...getSignedUrlParams } = params;
-    return this.s3.getSignedUrlPromise(operationType, {
-      ...getSignedUrlParams,
-      Bucket: this.bucketName,
-    });
+    const { operationType, Key, Expires } = params;
+    return Buffer.from(
+      this.bucketName + Key + operationType + Expires.toString()
+    ).toString('base64');
   }
 
   public async getObject(getObjectParams: GetObjectParams) {

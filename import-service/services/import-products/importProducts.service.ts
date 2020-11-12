@@ -1,9 +1,6 @@
 import { HttpError } from '../../../utils/HttpError';
 import { AwsSdkS3Service } from '../AwsSdkS3Service';
-
-const bucketName = 'import-service-files';
-const uploadedDirKey = 'uploaded/';
-const parsedDirKey = 'parsed/';
+import { importServiceBucketName, uploadedDirKey } from '../constants';
 
 export const getFileUploadSignedUrl = async (
   fileName: string
@@ -11,7 +8,7 @@ export const getFileUploadSignedUrl = async (
   try {
     const Key = uploadedDirKey + fileName;
     const signedUrl = await new AwsSdkS3Service({
-      bucketName,
+      bucketName: importServiceBucketName,
       signatureVersion: 'v4',
     }).getSignedUrl({
       operationType: 'putObject',
