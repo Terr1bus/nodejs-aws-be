@@ -9,12 +9,12 @@
   },
   "dependencies": {
     "ajv": "^7.0.0-beta.4",
-    "aws-sdk": "^2.789.0",
-    "aws-sdk-mock": "^5.1.0",
     "csv-parser": "^2.3.3",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
+    "aws-sdk-mock": "^5.1.0",
+    "aws-sdk": "^2.789.0",
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.12.18",
     "@types/serverless": "^1.72.5",
