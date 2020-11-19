@@ -9,21 +9,23 @@ type ImportFileParserServiceParams = {
 
 export const importFileParserService = async (
   params: ImportFileParserServiceParams
-) => {
+): Promise<string[]> => {
   try {
     return new Promise(async (resolve, reject) => {
+      const result: string[] = [];
       const { bucketName, key } = params;
       const s3 = new AwsSdkS3Service({ bucketName });
       const s3Object = await s3.getObject({ Key: key });
-      console.log({ s3Object });
+      console.log('s3Object', s3Object);
       const rStream = s3Object.createReadStream();
       rStream
         .pipe(csvParser())
         .on('data', (chunk) => {
           console.log('parsed chunk: ', chunk);
+          result.push(chunk);
         })
         .on('error', (err) => {
-          console.log({ err });
+          console.log('error', err);
           reject();
         })
         .on('end', async () => {
@@ -36,7 +38,8 @@ export const importFileParserService = async (
             Key: destinationObjectKey,
           });
           await s3.deleteObject({ Bucket: bucketName, Key: key });
-          resolve();
+          console.log('result', result);
+          resolve(result);
         });
     });
   } catch (e) {

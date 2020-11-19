@@ -1,3 +1,7 @@
 import 'source-map-support/register';
 
-export { importProductsFile, importFileParser } from './services';
+export {
+  importProductsFile,
+  importFileParser,
+  catalogBatchProcess,
+} from './services';

@@ -7,6 +7,7 @@ const serverlessConfiguration: Serverless = {
     // app: your-app-name,
     // org: your-org-name,
   },
+
   frameworkVersion: '2',
   custom: {
     webpack: {
@@ -14,8 +15,10 @@ const serverlessConfiguration: Serverless = {
       includeModules: true,
     },
   },
+
   // Add the serverless-webpack plugin
   plugins: ['serverless-webpack'],
+
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -26,7 +29,29 @@ const serverlessConfiguration: Serverless = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
+
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        // Resource: { 'Fn::GetAtt': ['SQS', 'Arn'] },
+        Resource: 'arn:aws:sqs:eu-west-1:457593704115:catalogBatchProcess:*',
+      },
+    ],
   },
+
+  resources: {
+    Resources: {
+      SQS: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalogBatchProcess',
+          ReceiveMessageWaitTimeSeconds: 20,
+        },
+      },
+    },
+  },
+
   functions: {
     importProductsFile: {
       handler: 'handler.importProductsFile',
@@ -38,7 +63,7 @@ const serverlessConfiguration: Serverless = {
             request: {
               parameters: {
                 querystrings: {
-                  fileName: true,
+                  name: true,
                 },
               },
             },
@@ -61,6 +86,17 @@ const serverlessConfiguration: Serverless = {
               },
             ],
             existing: true,
+          },
+        },
+      ],
+    },
+    catalogBatchProcess: {
+      handler: 'handler.catalogBatchProcess',
+      events: [
+        {
+          sqs: {
+            arn: { 'Fn::GetAtt': ['SQS', 'Arn'] },
+            batchSize: 5,
           },
         },
       ],
