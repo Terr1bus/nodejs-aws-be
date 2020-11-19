@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { ApiGatewayResult } from '../../utils/ApiGatewayResult';
-import { HttpError } from '../../utils/HttpError';
+import { ApiGatewayResult } from '../../../utils/ApiGatewayResult';
+import { HttpError } from '../../../utils/HttpError';
 import { getProductById } from './api';
 
 export const getProduct: APIGatewayProxyHandler = async (event, _context) => {
