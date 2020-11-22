@@ -28,14 +28,24 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SQS_URL: {
+        Ref: 'SQS',
+      },
+      SNS_Topic_ARN: {
+        Ref: 'SNSTopic',
+      },
     },
 
     iamRoleStatements: [
       {
         Effect: 'Allow',
         Action: 'sqs:*',
-        // Resource: { 'Fn::GetAtt': ['SQS', 'Arn'] },
-        Resource: 'arn:aws:sqs:eu-west-1:457593704115:catalogBatchProcess:*',
+        Resource: { 'Fn::GetAtt': ['SQS', 'Arn'] },
+      },
+      {
+        Effect: 'Allow',
+        Action: 'SNS:*',
+        Resource: { 'Fn::GetAtt': ['SNS', 'Arn'] },
       },
     ],
   },
@@ -47,6 +57,13 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           QueueName: 'catalogBatchProcess',
           ReceiveMessageWaitTimeSeconds: 20,
+        },
+      },
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          DisplayName: 'SNS Topic',
+          TopicName: 'createProductTopic',
         },
       },
     },

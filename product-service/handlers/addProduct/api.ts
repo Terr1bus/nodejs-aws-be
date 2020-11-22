@@ -1,6 +1,6 @@
 import { Client } from 'pg';
 import { Database } from '../../db/Database';
-import { Product } from '../types';
+import { Product } from '../../../types';
 
 type ProductForInsert = Omit<Product, 'id'>;
 
@@ -11,7 +11,7 @@ export const addProductToDb = async (
   try {
     client = await new Database().getConnection();
     const { description = null, price, title, count } = product;
-    console.log({ description, price, title });
+    console.log('🚀 ~ file: api.ts ~ line 14 ~ product', product);
     await client.query('BEGIN');
     const insertProductQueryResult = await client.query<{ id: string }>(
       'INSERT INTO products (title, price, description) values ($1, $2, $3) RETURNING id',

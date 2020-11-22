@@ -10,7 +10,7 @@
     "outDir": "lib",
     "resolveJsonModule": true
   },
-  "include": ["./**/*.ts"],
+  "include": ["./**/*.ts", "../types.ts"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",

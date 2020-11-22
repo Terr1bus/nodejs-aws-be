@@ -1,6 +1,6 @@
 import { Database } from '../../db/Database';
 
-import { Product } from '../types';
+import { Product } from '../../../types';
 
 type SortOrder = 'ASC' | 'DESC';
 

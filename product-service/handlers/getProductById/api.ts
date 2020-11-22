@@ -1,11 +1,14 @@
 import { validate } from 'uuid';
 
-import { HttpError } from '../../utils/HttpError';
-import { Product } from '../types';
+import { HttpError } from '../../../utils/HttpError';
+import { Product } from '../../../types';
 import { Database } from '../../db/Database';
 
 export const getProductById = async (id: string): Promise<Product> => {
-  const productNotFoundError = new HttpError('Product not found', 400);
+  const productNotFoundError = new HttpError({
+    message: 'Product not found',
+    code: 400,
+  });
   try {
     if (!validate(id)) {
       throw productNotFoundError;

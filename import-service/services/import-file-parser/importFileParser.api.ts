@@ -4,10 +4,13 @@ import { ApiGatewayError } from '../../../utils/ApiGatewayError';
 import { importFileParserService } from './importFileParser.service';
 
 export const importFileParser: S3Handler = async (event, context, callback) => {
-  console.log('event', event);
+  console.log('🚀 ~ file: importFileParser.api.ts ~ line 7 ~ event', event);
   try {
     for (const record of event.Records) {
-      console.log('Record: ', record);
+      console.log(
+        '🚀 ~ file: importFileParser.api.ts ~ line 10 ~ record',
+        record
+      );
       const {
         bucket: { name: bucketName },
         object: { key, eTag },
@@ -15,24 +18,36 @@ export const importFileParser: S3Handler = async (event, context, callback) => {
       const parsedCsv = await importFileParserService({ bucketName, key });
 
       const sqs = new SQS();
-      parsedCsv.forEach((csv) => {
-        console.log(`start of sending message ${JSON.stringify(csv)} to SQS`);
-        sqs.sendMessage(
-          {
-            QueueUrl:
-              'https://sqs.eu-west-1.amazonaws.com/457593704115/catalogBatchProcess',
-            MessageBody: JSON.stringify(csv),
-          },
-          (err, data) => {
-            if (err) {
-              console.log('error in send message to SQS', err);
-            } else {
-              console.log('data of message to SQS', data);
-            }
-          }
-        );
-        console.log(`end of sending message ${JSON.stringify(csv)} to SQS`);
-      });
+      await Promise.all(
+        parsedCsv.map(async (csvRecord) => {
+          console.log(
+            '🚀 ~ file: importFileParser.api.ts ~ line 23 ~ csvRecord',
+            csvRecord
+          );
+          console.log(
+            `start of sending message ${JSON.stringify(csvRecord)} to SQS`
+          );
+          const sqsUrl = process.env.SQS_URL;
+          await sqs
+            .sendMessage(
+              {
+                QueueUrl: sqsUrl,
+                MessageBody: JSON.stringify(csvRecord),
+              },
+              (err, data) => {
+                if (err) {
+                  console.log('error in send message to SQS', err);
+                } else {
+                  console.log('data of message to SQS', data);
+                }
+              }
+            )
+            .promise();
+          console.log(
+            `end of sending message ${JSON.stringify(csvRecord)} to SQS`
+          );
+        })
+      );
     }
   } catch (e) {
     return ApiGatewayError.handleError(e);
