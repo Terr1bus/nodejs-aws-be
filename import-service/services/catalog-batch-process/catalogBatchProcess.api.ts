@@ -26,11 +26,32 @@ export const catalogBatchProcess: SQSHandler = async (
             'https://pp6vr2duqa.execute-api.eu-west-1.amazonaws.com/dev/products'
           )
           .send(body);
+
+        const snsTopicArn = process.env.SNS_TOPIC_ARN;
+        console.log(
+          '🚀 ~ file: catalogBatchProcess.api.ts ~ line 53 ~ event.Records.map ~ snsTopicArn',
+          snsTopicArn
+        );
         return sns
-          .publish({
-            Message: `product was created: ${record.body}`,
-            TopicArn: process.env.SNS_Topic_ARN,
-          })
+          .publish(
+            {
+              Message: `product was created: ${record.body}`,
+              MessageAttributes: {},
+              TopicArn: snsTopicArn,
+            },
+            (err, data) => {
+              if (err) {
+                console.log(
+                  '🚀 ~ file: catalogBatchProcess.api.ts ~ line 38 ~ event.Records.map ~ err',
+                  err
+                );
+              }
+              console.log(
+                '🚀 ~ file: catalogBatchProcess.api.ts ~ line 40 ~ event.Records.map ~ data',
+                data
+              );
+            }
+          )
           .promise();
       })
     );

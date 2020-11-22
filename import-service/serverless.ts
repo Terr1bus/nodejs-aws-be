@@ -14,10 +14,19 @@ const serverlessConfiguration: Serverless = {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    SQS_URL: {
+      Ref: 'SQS',
+    },
+    SQS_ARN: {
+      'Fn::GetAtt': ['SQS', 'Arn'],
+    },
+    SNS_TOPIC_ARN: {
+      Ref: 'SNSTopic',
+    },
   },
 
   // Add the serverless-webpack plugin
-  plugins: ['serverless-webpack'],
+  plugins: ['serverless-webpack', 'serverless-dotenv-plugin'],
 
   provider: {
     name: 'aws',
@@ -28,24 +37,20 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      SQS_URL: {
-        Ref: 'SQS',
-      },
-      SNS_Topic_ARN: {
-        Ref: 'SNSTopic',
-      },
+      SQS_URL: '${self:custom.SQS_URL}',
+      SNS_TOPIC_ARN: '${self:custom.SNS_TOPIC_ARN}',
     },
 
     iamRoleStatements: [
       {
         Effect: 'Allow',
         Action: 'sqs:*',
-        Resource: { 'Fn::GetAtt': ['SQS', 'Arn'] },
+        Resource: '${self:custom.SQS_ARN}',
       },
       {
         Effect: 'Allow',
         Action: 'SNS:*',
-        Resource: { 'Fn::GetAtt': ['SNS', 'Arn'] },
+        Resource: '${self:custom.SNS_TOPIC_ARN}',
       },
     ],
   },
@@ -64,6 +69,14 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           DisplayName: 'SNS Topic',
           TopicName: 'createProductTopic',
+        },
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          TopicArn: '${self:custom.SNS_TOPIC_ARN}',
+          Endpoint: '${env:SNS_SUBSCRIPTION_ENDPOINT_EMAIL}',
         },
       },
     },
@@ -112,7 +125,7 @@ const serverlessConfiguration: Serverless = {
       events: [
         {
           sqs: {
-            arn: { 'Fn::GetAtt': ['SQS', 'Arn'] },
+            arn: '${self:custom.SQS_ARN}',
             batchSize: 5,
           },
         },
