@@ -29,19 +29,10 @@ export const importFileParser: S3Handler = async (event, context, callback) => {
           );
           const sqsUrl = process.env.SQS_URL;
           await sqs
-            .sendMessage(
-              {
-                QueueUrl: sqsUrl,
-                MessageBody: JSON.stringify(csvRecord),
-              },
-              (err, data) => {
-                if (err) {
-                  console.log('error in send message to SQS', err);
-                } else {
-                  console.log('data of message to SQS', data);
-                }
-              }
-            )
+            .sendMessage({
+              QueueUrl: sqsUrl,
+              MessageBody: JSON.stringify(csvRecord),
+            })
             .promise();
           console.log(
             `end of sending message ${JSON.stringify(csvRecord)} to SQS`

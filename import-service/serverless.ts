@@ -120,17 +120,6 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    catalogBatchProcess: {
-      handler: 'handler.catalogBatchProcess',
-      events: [
-        {
-          sqs: {
-            arn: '${self:custom.SQS_ARN}',
-            batchSize: 5,
-          },
-        },
-      ],
-    },
   },
 };
 

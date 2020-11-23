@@ -5,7 +5,8 @@
   "main": "handler.js",
   "scripts": {
     "deploy": "sls deploy",
-    "invoke:addProduct": "sls invoke local -f addProduct --path test-data/addProduct.json"
+    "invoke:addProduct": "sls invoke local -f addProduct --path test-data/addProduct.json",
+    "test": "jest"
   },
   "dependencies": {
     "@types/uuid": "^8.3.0",

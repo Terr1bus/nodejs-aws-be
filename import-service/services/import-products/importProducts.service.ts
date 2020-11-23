@@ -1,5 +1,5 @@
 import { HttpError } from '../../../utils/HttpError';
-import { AwsSdkS3Service } from '../AwsSdkS3Service';
+import { AwsSdkS3Service } from '../../../aws-sdk';
 import { importServiceBucketName, uploadedDirKey } from '../constants';
 
 export const getFileUploadSignedUrl = async (

@@ -70,6 +70,17 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    catalogBatchProcess: {
+      handler: 'lambdas.catalogBatchProcess',
+      events: [
+        {
+          sqs: {
+            arn: '${self:custom.SQS_ARN}',
+            batchSize: 5,
+          },
+        },
+      ],
+    },
   },
 };
 

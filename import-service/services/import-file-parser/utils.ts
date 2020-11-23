@@ -1,6 +1,6 @@
-import { Product } from '../../../types';
+import { IProduct } from '../../../types';
 
-export const castProductRecord = (data: Record<string, string>): Product => {
+export const castProductRecord = (data: Record<string, string>): IProduct => {
   return Object.keys(data).reduce((accum, key) => {
     const val = data[key];
     const intVal = parseInt(val, 10);
@@ -16,5 +16,5 @@ export const castProductRecord = (data: Record<string, string>): Product => {
       accum[key] = val;
     }
     return accum;
-  }, {} as Product);
+  }, {} as IProduct);
 };
