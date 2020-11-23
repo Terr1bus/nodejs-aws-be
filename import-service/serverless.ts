@@ -21,9 +21,6 @@ const serverlessConfiguration: Serverless = {
     SQS_ARN: {
       'Fn::GetAtt': ['SQS', 'Arn'],
     },
-    SNS_TOPIC_ARN: {
-      Ref: 'SNSTopic',
-    },
   },
 
   // Add the serverless-webpack plugin
@@ -39,7 +36,6 @@ const serverlessConfiguration: Serverless = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       SQS_URL: '${self:custom.SQS_URL}',
-      SNS_TOPIC_ARN: '${self:custom.SNS_TOPIC_ARN}',
     },
 
     iamRoleStatements: [
@@ -47,11 +43,6 @@ const serverlessConfiguration: Serverless = {
         Effect: 'Allow',
         Action: 'sqs:*',
         Resource: '${self:custom.SQS_ARN}',
-      },
-      {
-        Effect: 'Allow',
-        Action: 'SNS:*',
-        Resource: '${self:custom.SNS_TOPIC_ARN}',
       },
     ],
   },
@@ -63,21 +54,6 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           QueueName: 'catalogBatchProcess',
           ReceiveMessageWaitTimeSeconds: 20,
-        },
-      },
-      SNSTopic: {
-        Type: 'AWS::SNS::Topic',
-        Properties: {
-          DisplayName: 'SNS Topic',
-          TopicName: 'createProductTopic',
-        },
-      },
-      SNSSubscription: {
-        Type: 'AWS::SNS::Subscription',
-        Properties: {
-          Protocol: 'email',
-          TopicArn: '${self:custom.SNS_TOPIC_ARN}',
-          Endpoint: '${env:SNS_SUBSCRIPTION_ENDPOINT_EMAIL}',
         },
       },
     },

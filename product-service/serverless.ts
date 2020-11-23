@@ -8,14 +8,21 @@ const serverlessConfiguration: Serverless = {
     // org: your-org-name,
   },
   frameworkVersion: '2',
+
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    SNS_TOPIC_ARN: {
+      Ref: 'SNSTopic',
+    },
+    SQS_ARN: '${cf:import-service-${self:provider.stage}.sqsArn}',
   },
+
   // Add the serverless-webpack plugin
   plugins: ['serverless-webpack', 'serverless-dotenv-plugin'],
+
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -31,8 +38,17 @@ const serverlessConfiguration: Serverless = {
       DB_NAME: '${env:DB_NAME}',
       DB_USERNAME: '${env:DB_USERNAME}',
       DB_PASSWORD: '${env:DB_PASSWORD}',
+      SNS_TOPIC_ARN: '${self:custom.SNS_TOPIC_ARN}',
     },
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'SNS:*',
+        Resource: '${self:custom.SNS_TOPIC_ARN}',
+      },
+    ],
   },
+
   functions: {
     getProductById: {
       handler: 'lambdas.getProduct',
@@ -75,11 +91,40 @@ const serverlessConfiguration: Serverless = {
       events: [
         {
           sqs: {
-            arn: '${cf:import-service-${self:provider.stage}.sqsArn}',
+            arn: '${self:custom.SQS_ARN}',
             batchSize: 5,
           },
         },
       ],
+    },
+  },
+
+  resources: {
+    Resources: {
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          DisplayName: 'SNS Topic',
+          TopicName: 'createProductTopic',
+        },
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          TopicArn: '${self:custom.SNS_TOPIC_ARN}',
+          Endpoint: '${env:SNS_SUBSCRIPTION_ENDPOINT_EMAIL}',
+        },
+      },
+      SNSSubscriptionWithFilter: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Protocol: 'email',
+          TopicArn: '${self:custom.SNS_TOPIC_ARN}',
+          Endpoint: '${env:SNS_SUBSCRIPTION_ENDPOINT_EMAIL_WITH_FILTER}',
+          FilterPolicy: JSON.stringify({ price: [{ numeric: ['<', 200] }] }),
+        },
+      },
     },
   },
 };
