@@ -75,7 +75,7 @@ const serverlessConfiguration: Serverless = {
       events: [
         {
           sqs: {
-            arn: '${self:custom.SQS_ARN}',
+            arn: '${cf:import-service-${self:provider.stage}.sqsArn}',
             batchSize: 5,
           },
         },

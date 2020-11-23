@@ -1,4 +1,7 @@
-import { ValidationResult, Validator } from '../../../utils/Validation';
+import {
+  ValidationResult,
+  Validator,
+} from '../../../utils/Validation/Validator';
 
 const productValidationSchema = {
   type: 'object',

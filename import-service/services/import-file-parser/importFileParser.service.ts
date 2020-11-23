@@ -3,7 +3,7 @@ import csvParser from 'csv-parser';
 import stream from 'stream';
 
 import { IProduct } from '../../../types';
-import { AwsSdkS3Service } from '../../../aws-sdk';
+import { S3Service } from '../../../aws-sdk';
 import { parsedDirKey } from '../constants';
 import { castProductRecord } from './utils';
 
@@ -21,7 +21,7 @@ export const importFileParserService = async (
     return new Promise(async (resolve, reject) => {
       const result: IProduct[] = [];
       const { bucketName, key } = params;
-      const s3 = new AwsSdkS3Service({ bucketName });
+      const s3 = new S3Service({ bucketName });
       const s3Object = await s3.getObject({ Key: key });
       console.log(
         '🚀 ~ file: importFileParser.service.ts ~ line 19 ~ s3Object',

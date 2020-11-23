@@ -9,6 +9,7 @@ const serverlessConfiguration: Serverless = {
   },
 
   frameworkVersion: '2',
+
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
@@ -78,6 +79,11 @@ const serverlessConfiguration: Serverless = {
           TopicArn: '${self:custom.SNS_TOPIC_ARN}',
           Endpoint: '${env:SNS_SUBSCRIPTION_ENDPOINT_EMAIL}',
         },
+      },
+    },
+    Outputs: {
+      sqsArn: {
+        Value: '${self:custom.SQS_ARN}',
       },
     },
   },
