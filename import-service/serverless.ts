@@ -7,15 +7,25 @@ const serverlessConfiguration: Serverless = {
     // app: your-app-name,
     // org: your-org-name,
   },
+
   frameworkVersion: '2',
+
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    SQS_URL: {
+      Ref: 'SQS',
+    },
+    SQS_ARN: {
+      'Fn::GetAtt': ['SQS', 'Arn'],
+    },
   },
+
   // Add the serverless-webpack plugin
-  plugins: ['serverless-webpack'],
+  plugins: ['serverless-webpack', 'serverless-dotenv-plugin'],
+
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -25,8 +35,35 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SQS_URL: '${self:custom.SQS_URL}',
+    },
+
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: '${self:custom.SQS_ARN}',
+      },
+    ],
+  },
+
+  resources: {
+    Resources: {
+      SQS: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalogBatchProcess',
+          ReceiveMessageWaitTimeSeconds: 20,
+        },
+      },
+    },
+    Outputs: {
+      sqsArn: {
+        Value: '${self:custom.SQS_ARN}',
+      },
     },
   },
+
   functions: {
     importProductsFile: {
       handler: 'handler.importProductsFile',
@@ -38,7 +75,7 @@ const serverlessConfiguration: Serverless = {
             request: {
               parameters: {
                 querystrings: {
-                  fileName: true,
+                  name: true,
                 },
               },
             },

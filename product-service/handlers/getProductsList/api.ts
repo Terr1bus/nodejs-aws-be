@@ -1,6 +1,6 @@
 import { Database } from '../../db/Database';
 
-import { Product } from '../types';
+import { IProduct } from '../../../types';
 
 type SortOrder = 'ASC' | 'DESC';
 
@@ -30,10 +30,10 @@ const defaultOptions: Options = {
 
 export const getAllProductsFromDb = async (
   options = defaultOptions
-): Promise<Product[]> => {
+): Promise<IProduct[]> => {
   try {
     const client = await new Database().getConnection();
-    const productsQueryResult = await client.query<Product>(
+    const productsQueryResult = await client.query<IProduct>(
       'SELECT * FROM products LEFT JOIN stock ON products.id = stock.product_id'
     );
     const { count, offset, page, sort } = options;

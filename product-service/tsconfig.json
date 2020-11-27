@@ -8,9 +8,10 @@
     "sourceMap": true,
     "target": "es2017",
     "outDir": "lib",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["./**/*.ts"],
+  "include": ["./**/*.ts", "../types.ts", "serverless.ts", "../aws-sdk"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",

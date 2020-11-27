@@ -16,7 +16,7 @@ type GetObjectParams = Omit<S3.GetObjectRequest, 'Bucket'>;
 
 type DeleteObjectParams = S3.DeleteObjectRequest;
 
-export class AwsSdkS3Service {
+export class S3Service {
   private bucketName: string;
 
   private s3: S3;

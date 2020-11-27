@@ -1,7 +1,7 @@
 import { importServiceBucketName, uploadedDirKey } from '../../constants';
 import { getFileUploadSignedUrl } from '../importProducts.service';
 
-jest.mock('../../AwsSdkS3Service.ts');
+jest.mock('../../../../aws-sdk/AwsSdkS3Service.ts');
 
 describe('getFileUploadSignedUrl spec', () => {
   test('should return signed url', async () => {

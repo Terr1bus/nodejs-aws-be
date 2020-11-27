@@ -10,18 +10,13 @@ export const addProduct: APIGatewayProxyHandler = async (
   callback
 ) => {
   try {
-    console.log({ event });
+    console.log('🚀 ~ file: handler.ts ~ line 14 ~ event', event);
     const parsedBody = JSON.parse(event.body);
+    console.log('🚀 ~ file: handler.ts ~ line 15 ~ parsedBody', parsedBody);
     if (parsedBody === null) {
-      throw new HttpError('Invalid data', 400);
+      throw new HttpError({ message: 'Invalid data', code: 400 });
     }
-    const { count, description, price, title } = parsedBody;
-    const addedProduct = await addProductToDb({
-      count,
-      price,
-      title,
-      description,
-    });
+    const addedProduct = await addProductToDb(parsedBody);
     const result = new ApiGatewayResult({
       body: { data: { product: addedProduct } },
       statusCode: 200,
