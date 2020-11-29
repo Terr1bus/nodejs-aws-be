@@ -24,7 +24,11 @@ const serverlessConfiguration: Serverless = {
   },
 
   // Add the serverless-webpack plugin
-  plugins: ['serverless-webpack', 'serverless-dotenv-plugin'],
+  plugins: [
+    'serverless-webpack',
+    'serverless-dotenv-plugin',
+    'serverless-pseudo-parameters',
+  ],
 
   provider: {
     name: 'aws',
@@ -70,6 +74,14 @@ const serverlessConfiguration: Serverless = {
       events: [
         {
           http: {
+            authorizer: {
+              type: 'token',
+              arn:
+                'arn:aws:lambda:${self:provider.region}:${AWS::AccountId}:function:authorization-service-dev-basicAuthorizer',
+              identitySource: 'method.request.header.Authorization',
+              resultTtlInSeconds: 0,
+              name: 'import-service-token-authorizer',
+            },
             method: 'get',
             path: 'import',
             request: {
