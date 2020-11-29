@@ -26,31 +26,18 @@ export const basicAuthorizer: APIGatewayAuthorizerHandler = (
     const [username, password] = userCreds.split(':');
     console.log('🚀 ~ file: api.ts ~ line 30 ~ username', username);
     console.log('🚀 ~ file: api.ts ~ line 30 ~ password', password);
-    if (!username || !password) {
-      throw new Error('username or password not valid');
-    }
+    const envPassword = process.env[username];
     const effect: Effect =
-      process.env[username] === password ? 'Allow' : 'Deny';
+      envPassword && process.env[username] === password ? 'Allow' : 'Deny';
+    console.log('🚀 ~ file: api.ts ~ line 33 ~ effect', effect);
     return callback(
       null,
       generatePolicy(event.authorizationToken, event.methodArn, effect)
     );
   } catch (e) {
-    return callback(`Unauthorized ${e.message}`);
+    console.log('🚀 ~ file: api.ts ~ line 53 ~ e', e);
+    return callback(`Unauthorized`);
   }
-
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify(
-  //     {
-  //       message:
-  //         'Go Serverless Webpack (Typescript) v1.0! Your function executed successfully!',
-  //       input: event,
-  //     },
-  //     null,
-  //     2
-  //   ),
-  // };
 };
 
 type Effect = 'Allow' | 'Deny';
@@ -73,6 +60,6 @@ const generatePolicy = (
       ],
     },
   };
-  console.log('🚀 ~ file: api.ts ~ line 64 ~ policy', policy);
+  console.log('🚀 ~ file: api.ts ~ line 64 ~ policy', JSON.stringify(policy));
   return policy;
 };
