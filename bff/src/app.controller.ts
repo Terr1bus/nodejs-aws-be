@@ -6,6 +6,7 @@ import {
   All,
   HttpService,
   Res,
+  Body,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Method as RequestMethod } from 'axios';
@@ -26,6 +27,7 @@ export class AppController {
     @Req() req: Request,
     @Res() res: Response,
     @Param() params: any,
+    @Body() body: any,
     @Method() method: RequestMethod,
   ) {
     const { path, query, url, baseUrl, originalUrl } = req;
@@ -41,6 +43,7 @@ export class AppController {
       cartUrl: this.configSerice.get('CART'),
       params,
       serviceUrl,
+      body: JSON.stringify(body),
     };
     console.log(
       '🚀 ~ file: app.controller.ts ~ line 33 ~ AppController ~ metaData',
@@ -54,6 +57,7 @@ export class AppController {
         .request({
           method,
           url: `${serviceUrl}${path}`,
+          ...(Object.keys(body).length !== 0 && { data: body }),
         })
         .toPromise();
       const data = serviceResponse.data;
