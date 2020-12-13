@@ -31,7 +31,7 @@ export class AppController {
     @Method() method: RequestMethod,
   ) {
     const { path, query, url, baseUrl, originalUrl } = req;
-    const serviceUrl = this.configSerice.get(params.service.toUpperCase());
+    const serviceUrl = this.configSerice.get(params.service);
     const metaData = {
       method,
       path,
@@ -39,8 +39,8 @@ export class AppController {
       url,
       baseUrl,
       originalUrl,
-      productUrl: this.configSerice.get('PRODUCT'),
-      cartUrl: this.configSerice.get('CART'),
+      productUrl: this.configSerice.get('product'),
+      cartUrl: this.configSerice.get('cart'),
       params,
       serviceUrl,
       body: JSON.stringify(body),
