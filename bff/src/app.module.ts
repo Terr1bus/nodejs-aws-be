@@ -1,7 +1,7 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { CacheService } from './cache.service';
 
 @Module({
   imports: [
@@ -11,6 +11,6 @@ import { AppService } from './app.service';
     HttpModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [CacheService],
 })
 export class AppModule {}
